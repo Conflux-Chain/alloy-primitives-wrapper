@@ -22,16 +22,14 @@ macro_rules! impl_uint_wrapper {
 
         impl From<$ethereum_type> for $wrapper {
             fn from(a: $ethereum_type) -> Self {
-                let mut raw: [u8; $size] = [0u8; $size];
-                a.to_big_endian(&mut raw);
+                let raw = a.to_big_endian();
                 $wrapper(<$alloy_type>::from_be_bytes(raw))
             }
         }
 
         impl From<&$ethereum_type> for $wrapper {
             fn from(a: &$ethereum_type) -> Self {
-                let mut raw: [u8; $size] = [0u8; $size];
-                a.to_big_endian(&mut raw);
+                let raw = a.to_big_endian();
                 $wrapper(<$alloy_type>::from_be_bytes(raw))
             }
         }
@@ -45,7 +43,7 @@ macro_rules! impl_uint_wrapper {
     };
 }
 
-// ethereum-types 只有 U64, U128, U256, U512
+// ethereum-types only provides U64, U128, U256, U512
 impl_uint_wrapper!(WU64, alloy_primitives::U64, ethereum_types::U64, 8);
 impl_uint_wrapper!(WU128, alloy_primitives::U128, ethereum_types::U128, 16);
 impl_uint_wrapper!(WU256, alloy_primitives::U256, ethereum_types::U256, 32);
